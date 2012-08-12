@@ -164,6 +164,14 @@ var Snake = {
 	spawnFood : function() {
 		Snake.food.x = Math.floor(Math.random() * (View.canvas.width/Snake.gridSize)) * Snake.gridSize;
 		Snake.food.y = Math.floor(Math.random() * (View.canvas.height/Snake.gridSize)) * Snake.gridSize;
+
+		if (Snake.body.some(Snake.foodHitsSnake)) {
+			Snake.spawnFood();
+		}
+	},
+
+	foodHitsSnake : function(element, index, array) {
+		return (element.x == Snake.food.x && element.y == Snake.food.y);
 	},
 };
 

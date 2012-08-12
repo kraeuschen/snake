@@ -3,8 +3,9 @@ var View = {
 	init : function() {
 		this.canvas  = document.getElementById('canvas');
 		this.context = this.canvas.getContext('2d');
-		this.draw();
 		this.info    = document.getElementById('playing');
+		this.score   = document.getElementById('score');
+		this.draw();
 	},
 
 	setInfo : function(infoText) {
@@ -26,6 +27,7 @@ var View = {
 		// draw snake
 		View.drawSnake();
 		View.drawFood();
+		View.drawScore();
 	},
 
 	drawFood : function() {
@@ -45,10 +47,14 @@ var View = {
 			var part = Snake.body[i];
 
 			this.context.fillRect(
-				part.x * Snake.gridSize,
-				part.y * Snake.gridSize,
+				part.x,
+				part.y,
 				Snake.gridSize,
 				Snake.gridSize);
 		};
+	},
+
+	drawScore : function() {
+		this.score.innerHTML = Snake.score;
 	},
 };

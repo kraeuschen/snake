@@ -4,6 +4,7 @@ var Snake = {
 	current : {},
 	body    : [],
 	food    : {},
+	score   : 0,
 
 	gridSize : 10,
 	speed    : 100, // lower is faster
@@ -36,6 +37,7 @@ var Snake = {
 		Snake.actions = [];
 		Snake.body    = [];
 		Snake.playing = false;
+		Snake.points  = 0;
 		Snake.current = {
 			x : 0,
 			y : 0,
@@ -93,13 +95,13 @@ var Snake = {
 	// check if the snake is collided
 	collided : function() {
 		// reaches court borders
-		if (Snake.current.x * Snake.gridSize >= View.canvas.width ||
+		if (Snake.current.x >= View.canvas.width ||
 			Snake.current.x < 0
 		) {
 			return true;
 		}
 
-		if (Snake.current.y * Snake.gridSize >= View.canvas.height ||
+		if (Snake.current.y >= View.canvas.height ||
 			Snake.current.y < 0
 		) {
 			return true;
@@ -117,19 +119,19 @@ var Snake = {
 		// filters input
 		switch (direction) {
 			case Snake.DIR.UP:
-				y = y - 1;
+				y = y - 1 * Snake.gridSize;
 				dir = direction;
 				break;
 			case Snake.DIR.RIGHT:
-				x = x + 1;
+				x = x + 1 * Snake.gridSize;
 				dir = direction;
 				break;
 			case Snake.DIR.DOWN:
-				y = y + 1;
+				y = y + 1 * Snake.gridSize;
 				dir = direction;
 				break;
 			case Snake.DIR.LEFT:
-				x = x - 1;
+				x = x - 1 * Snake.gridSize;
 				dir = direction;
 				break;
 		}
@@ -138,8 +140,19 @@ var Snake = {
 		Snake.current.y = y;
 		Snake.current.direction = dir;
 
+		// new position
 		Snake.body.push({x : Snake.current.x, y : Snake.current.y});
-		Snake.body.shift();
+
+		// eats apple?
+		if (Snake.food.x == Snake.current.x &&
+			Snake.food.y == Snake.current.y
+		) {
+			Snake.body.push({x : Snake.current.x, y : Snake.current.y});
+			Snake.spawnFood();
+			Snake.score +=1;
+		} else {
+			Snake.body.shift();
+		}
 	},
 
 	// creates an apple

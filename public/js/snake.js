@@ -62,7 +62,7 @@ var Snake = {
 		Snake.actions = [];
 		Snake.body    = [];
 		Snake.playing = false;
-		Snake.points  = 0;
+		Snake.score   = 0;
 		Snake.current = {
 			x : 0,
 			y : 0,

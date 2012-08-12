@@ -2,11 +2,12 @@ var Snake = {
 
 	actions : [],
 	current : {},
-	
-	gridSize : 10, 
+	body    : [],
+
+	gridSize : 10,
 	speed    : 100, // lower is faster
 
-	playing  : false, 
+	playing  : false,
 
 	DIR : {
 		UP    : 0,
@@ -32,12 +33,15 @@ var Snake = {
 	// reset game vars and positions
 	reset : function() {
 		Snake.actions = [];
+		Snake.body    = [];
 		Snake.playing = false;
 		Snake.current = {
 			x : 0,
 			y : 0,
 			direction : Snake.DIR.RIGHT
 		};
+
+		Snake.body.push({x : 0, y : 0});
 	},
 
 	// pause function
@@ -130,6 +134,9 @@ var Snake = {
 		Snake.current.x = x;
 		Snake.current.y = y;
 		Snake.current.direction = dir;
+
+		Snake.body.push({x : Snake.current.x, y : Snake.current.y});
+		Snake.body.shift();
 	},
 };
 

@@ -82,14 +82,29 @@ var Snake = {
 			direction = Snake.actions.shift();
 		}
 
-		// next frame and redraw
+		// set next head point
 		Snake.move(direction);
-		View.draw();
 
-		// new position is invalid
+		// check if next head point is valid
 		if (Snake.collided()) {
 			Snake.loose();
 		}
+
+		// store next head point
+		Snake.body.push({x : Snake.current.x, y : Snake.current.y});
+
+		// eats apple?
+		if (Snake.food.x == Snake.current.x &&
+			Snake.food.y == Snake.current.y
+		) {
+			Snake.body.push({x : Snake.current.x, y : Snake.current.y});
+			Snake.spawnFood();
+			Snake.score +=1;
+		} else {
+			Snake.body.shift(); // drop first element
+		}
+
+		View.draw();
 	},
 
 	// check if the snake is collided
@@ -107,7 +122,11 @@ var Snake = {
 			return true;
 		}
 
-		return false;
+		return Snake.body.some(Snake.eatsItself);
+	},
+
+	eatsItself : function(element, index, array) {
+		return (element.x == Snake.current.x && element.y == Snake.current.y);
 	},
 
 	// changes moving direction
@@ -139,20 +158,6 @@ var Snake = {
 		Snake.current.x = x;
 		Snake.current.y = y;
 		Snake.current.direction = dir;
-
-		// new position
-		Snake.body.push({x : Snake.current.x, y : Snake.current.y});
-
-		// eats apple?
-		if (Snake.food.x == Snake.current.x &&
-			Snake.food.y == Snake.current.y
-		) {
-			Snake.body.push({x : Snake.current.x, y : Snake.current.y});
-			Snake.spawnFood();
-			Snake.score +=1;
-		} else {
-			Snake.body.shift();
-		}
 	},
 
 	// creates an apple

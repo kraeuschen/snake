@@ -7,7 +7,8 @@ var Snake = {
 	score   : 0,
 
 	gridSize : 10,
-	speed    : 100, // lower is faster
+	speed    : 0.1,
+	dt       : 0, // time since starting this game
 
 	playing  : false,
 
@@ -27,9 +28,33 @@ var Snake = {
 
 		View.setInfo('Press Space to start.');
 
-		setInterval(
-			Snake.handle,
-			Snake.speed);
+		var last = now = new Date().getTime();
+
+		var frame = function() {
+			now = new Date().getTime();
+
+			Snake.update(Math.min(1, (now - last) / 1000.0));
+			View.draw();
+
+			last = now;
+			requestAnimationFrame(frame, View.canvas);
+		};
+
+		frame();
+	},
+
+	update : function(idt) {
+		// paused
+		if (!Snake.playing) {
+			return;
+		}
+
+		Snake.dt = Snake.dt + idt;
+
+		if (Snake.dt > Snake.speed) {
+			Snake.dt = Snake.dt - Snake.speed;
+			Snake.handle();
+		}
 	},
 
 	// reset game vars and positions
@@ -69,11 +94,6 @@ var Snake = {
 
 	// game handler called by setInterval
 	handle : function() {
-		// paused
-		if (!Snake.playing) {
-			return;
-		}
-
 		// current direction
 		var direction = Snake.current.direction;
 
@@ -103,8 +123,6 @@ var Snake = {
 		} else {
 			Snake.body.shift(); // drop first element
 		}
-
-		View.draw();
 	},
 
 	// check if the snake is collided

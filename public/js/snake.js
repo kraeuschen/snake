@@ -3,6 +3,7 @@ var Snake = {
 	actions : [],
 	current : {},
 	body    : [],
+	food    : {},
 
 	gridSize : 10,
 	speed    : 100, // lower is faster
@@ -42,6 +43,8 @@ var Snake = {
 		};
 
 		Snake.body.push({x : 0, y : 0});
+
+		Snake.spawnFood();
 	},
 
 	// pause function
@@ -137,6 +140,12 @@ var Snake = {
 
 		Snake.body.push({x : Snake.current.x, y : Snake.current.y});
 		Snake.body.shift();
+	},
+
+	// creates an apple
+	spawnFood : function() {
+		Snake.food.x = Math.floor(Math.random() * (View.canvas.width/Snake.gridSize)) * Snake.gridSize;
+		Snake.food.y = Math.floor(Math.random() * (View.canvas.height/Snake.gridSize)) * Snake.gridSize;
 	},
 };
 

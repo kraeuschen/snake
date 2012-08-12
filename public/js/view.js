@@ -25,6 +25,16 @@ var View = {
 
 		// draw snake
 		View.drawSnake();
+		View.drawFood();
+	},
+
+	drawFood : function() {
+		this.context.fillStyle = "rgb(10,100,0)";
+		this.context.fillRect(
+			Snake.food.x,
+			Snake.food.y,
+			Snake.gridSize,
+			Snake.gridSize);
 	},
 
 	drawSnake : function() {
